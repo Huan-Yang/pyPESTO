@@ -57,7 +57,7 @@ class Optimizer:
                 try:
                     import dlib
                 except ImportError:
-                    print('No installation of dlib was found, which is required for this solver.')
+                    print('No installation of dlib was found, which is required for the ' + self.solver + ' method.')
 
             dlib_method = self.solver[5:]
 
@@ -68,5 +68,45 @@ class Optimizer:
                 int(self.options['maxiter']),
                 0.002,
             )
+
+        elif re.match('^(?i)(pyopt_)',self.solver):
+
+            if 'pyopt' not in sys.modules:
+                try:
+                    import pyopt
+                except ImportError:
+                    print('No installation of pyopt was found, which is required for the ' + self.solver + ' method.')
+
+            pyopt_method = self.solver[6:]
+
+            opt_prob = pyopt.pyOpt_optimization.Optimization('pyPesto',problem.objective.get_fval_pyopt)
+            opt_prob.addObj('f')
+
+            for index, name in enumerate(problem.parameter_names):
+                opt_prob.addVar(name, type='c', value=x0[index], lower=lb[index], upper=ub[index])
+
+            if pyopt_method == 'SNOPT':
+                opt = pyopt.SNOPT(options={
+                })
+
+            if pyopt_method == 'NLPQL':
+                opt = pyopt.NLPQL(options={
+                    'maxIt':self.options['maxiter'],
+                    'lql':False,
+                })
+
+            if pyopt_method == 'NLPQLP':
+                opt = pyopt.NLPQLP(options={
+                    'MAXIt':self.options['maxiter'],
+                    'LQL':False,
+                })
+
+            if pyopt_method == 'FSQP':
+                opt = pyopt.FSQP(options={
+                })
+
+
+            opt(opt_prob, sens_type=problem.objective.get_grad_pyopt, disp_opts=False)
+            res = opt_prob.solution[0]
 
         return res

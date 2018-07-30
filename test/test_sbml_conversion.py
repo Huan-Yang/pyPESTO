@@ -11,11 +11,12 @@ import statistics
 import warnings
 
 optimizers = {
-    'scipy': ['Nelder-Mead', 'Powell', 'CG', 'BFGS', 'Newton-CG', 'L-BFGS-B', 'TNC', 'COBYLA', 'SLSQP',
-              'dogleg', 'trust-ncg', 'trust-exact', 'trust-krylov',
-              'ls_trf', 'ls_dogbox'],
+    #'scipy': ['Nelder-Mead', 'Powell', 'CG', 'BFGS', 'Newton-CG', 'L-BFGS-B', 'TNC', 'COBYLA', 'SLSQP',
+    #          'dogleg', 'trust-ncg', 'trust-exact', 'trust-krylov',
+    #          'ls_trf', 'ls_dogbox'],
     # disabled: ,'trust-constr', 'ls_lm'
-    'dlib' : ['default']
+    #'dlib' : ['default'],
+    'pyopt': ['SNOPT', 'NLPQL', 'NLPQLP', 'FSQP']
 }
 
 class OptimizerTest(unittest.TestCase):

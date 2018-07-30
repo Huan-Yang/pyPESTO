@@ -32,9 +32,17 @@ class Objective:
         res, sres  = self.call(par, sensi_order=0, mode='res')
         return res
 
-    def get_sres(self,par):
+    def get_sres(self, par):
         res, sres = self.call(par, sensi_order=1, mode='res')
         return sres
+
+    def get_fval_pyopt(self, par):
+        nllh, snllh, ssnllh = self.call(par, sensi_order=0, mode='fun')
+        return nllh, [], nllh == float('inf')
+
+    def get_grad_pyopt(self, par):
+        nllh, snllh, ssnllh = self.call(par, sensi_order=1, mode='fun')
+        return snllh, [], nllh == float('inf')
 
     def call(self, par, sensi_order=1, mode='fun'):
         return self.fun(par, sensi_order)
